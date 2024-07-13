@@ -1,0 +1,76 @@
+// Array para armazenar as tarefas
+let tasks = [];
+
+// Referências aos elementos do DOM
+const taskInput = document.createElement('input');
+taskInput.setAttribute('type', 'text');
+taskInput.setAttribute('placeholder', 'Digite uma nova tarefa...');
+taskInput.setAttribute('style', 'margin-right: 10px;');
+
+const addButton = document.createElement('button');
+addButton.textContent = 'Adicionar Tarefa';
+addButton.addEventListener('click', () => {
+    const newTaskDescription = taskInput.value.trim();
+    if (newTaskDescription !== '') {
+        addTask(newTaskDescription);
+        taskInput.value = '';
+    }
+});
+
+const taskList = document.createElement('ul');
+
+document.body.appendChild(taskInput);
+document.body.appendChild(addButton);
+document.body.appendChild(taskList);
+
+// Função para renderizar as tarefas na lista
+function renderTasks() {
+    taskList.innerHTML = '';
+    tasks.forEach((task, index) => {
+        const li = document.createElement('li');
+        li.textContent = task.description;
+        
+        const completeButton = document.createElement('button');
+        completeButton.textContent = 'Concluir';
+        completeButton.addEventListener('click', () => {
+            toggleTaskCompleted(index);
+        });
+
+        const removeButton = document.createElement('button');
+        removeButton.textContent = 'Remover';
+        removeButton.addEventListener('click', () => {
+            removeTask(index);
+        });
+
+        li.appendChild(completeButton);
+        li.appendChild(removeButton);
+        taskList.appendChild(li);
+
+        if (task.completed) {
+            li.style.textDecoration = 'line-through';
+        }
+    });
+}
+
+// Função para adicionar uma nova tarefa
+function addTask(description) {
+    tasks.push({ description, completed: false });
+    renderTasks();
+}
+
+// Função para alternar o estado de conclusão de uma tarefa
+function toggleTaskCompleted(index) {
+    tasks[index].completed = !tasks[index].completed;
+    renderTasks();
+}
+
+// Função para remover uma tarefa
+function removeTask(index) {
+    tasks.splice(index, 1);
+    renderTasks();
+}
+
+// Inicializa a aplicação com algumas tarefas iniciais
+addTask('Lavar a louça');
+addTask('Passar roupa');
+addTask('Fazer compras');
